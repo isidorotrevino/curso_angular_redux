@@ -10,7 +10,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app.reducer';
 import { ActivarLoadingAction, DesactivarLoadingAction } from '../shared/ui.actions';
-import { SetUserAction } from './auth.actions';
+import {SetUserAction, UnsetUserAction} from './auth.actions';
 import { Subscription } from 'rxjs';
 
 @Injectable({
@@ -89,6 +89,7 @@ export class AuthService {
   logout() {
     this.router.navigate(['/login']);
     this.afAuth.auth.signOut();
+    this.store.dispatch(new UnsetUserAction());
   }
   isAuth() {
     return this.afAuth.authState
