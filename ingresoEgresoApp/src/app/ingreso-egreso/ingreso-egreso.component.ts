@@ -1,12 +1,13 @@
-import { Component, OnInit,OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { IngresoEgreso } from './ingreso-egreso.model';
-import { IngresoEgresoService } from './ingreso-egreso.service';
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import {FormGroup, FormControl, Validators} from '@angular/forms';
+import {IngresoEgreso} from './ingreso-egreso.model';
+import {IngresoEgresoService} from './ingreso-egreso.service';
 import Swal from 'sweetalert2';
-import { Store } from '@ngrx/store';
-import { AppState } from '../app.reducer';
-import { Subscription } from 'rxjs';
-import { ActivarLoadingAction, DesactivarLoadingAction } from '../shared/ui.actions';
+import {Store} from '@ngrx/store';
+import {AppState} from '../app.reducer';
+import {Subscription} from 'rxjs';
+import {ActivarLoadingAction, DesactivarLoadingAction} from '../shared/ui.actions';
+import {IngresoEgresoReducerAppState} from './ingreso-egreso.reducer';
 
 @Component({
   selector: 'app-ingreso-egreso',
@@ -18,17 +19,18 @@ export class IngresoEgresoComponent implements OnInit, OnDestroy {
   cargando: boolean;
   forma: FormGroup;
   tipo = 'ingreso';
-  loadingSubscription: Subscription = new Subscription(); 
+  loadingSubscription: Subscription = new Subscription();
 
   constructor(public ingresoEgresoService: IngresoEgresoService,
-    private store: Store<AppState>) { }
+              private store: Store<IngresoEgresoReducerAppState>) {
+  }
 
   ngOnInit() {
     this.loadingSubscription = this.store.select('ui')
       .subscribe(ui => this.cargando = ui.isLoading);
     this.forma = new FormGroup({
-      'descripcion': new FormControl('', Validators.required),
-      'monto': new FormControl(0, Validators.min(0))
+      descripcion: new FormControl('', Validators.required),
+      monto: new FormControl(0, Validators.min(0))
     });
   }
 
@@ -38,10 +40,10 @@ export class IngresoEgresoComponent implements OnInit, OnDestroy {
 
   crearIngresoEgreso() {
     this.store.dispatch(new ActivarLoadingAction());
-    const ingresoEgreso = new IngresoEgreso({ ... this.forma.value, tipo: this.tipo });
+    const ingresoEgreso = new IngresoEgreso({...this.forma.value, tipo: this.tipo});
     this.ingresoEgresoService.crearIngresoEgreso(ingresoEgreso)
       .then(() => {
-        this.forma.reset({ monto: 0 });
+        this.forma.reset({monto: 0});
         Swal.fire('Operación registrada', ingresoEgreso.descripcion, 'success');
         this.store.dispatch(new DesactivarLoadingAction());
       });
