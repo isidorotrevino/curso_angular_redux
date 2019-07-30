@@ -8,10 +8,10 @@ import { Subscription } from 'rxjs';
   templateUrl: './register.component.html',
   styles: []
 })
-export class RegisterComponent implements OnInit,OnDestroy {
+export class RegisterComponent implements OnInit, OnDestroy {
 
   cargando: boolean;
-  subscription: Subscription;
+  subscription: Subscription = new Subscription();
 
   constructor(public authService: AuthService,
     private store: Store<AppState>
