@@ -1,3 +1,36 @@
-<p>
-  usuario works!
-</p>
+<div class="row" *ngIf="loading">
+<div class="col">
+  <div class="alert alert-info text-center">
+    <i class="fa fa-sync fa-spin fa-2x"></i>
+    <h1>Espere...</h1>
+  </div>
+</div>
+</div>
+
+<div class="row" *ngIf="error">
+  <div class="col">
+    <div class="alert alert-danger text-center">
+      <i class="fa fa-times fa-spin fa-2x"></i>
+      <h1>Error: {{error.status}}</h1>
+      <p>
+        {{error.message}}
+        <br/>
+        {{error.url}}
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="usuario">
+  <div class="col">
+    <img [src]="usuario.avatar" class="img-thumbnail">
+  </div>
+  <div class="col">
+    <ul class="list-group">
+      <li class="list-group-item">{{usuario.first_name}} {{usuario.last_name}}</li>
+      <li class="list-group-item">ID {{usuario.id}}</li>
+      <li class="list-group-item">Email {{usuario.email}}</li>
+    </ul>
+
+  </div>
+</div>
